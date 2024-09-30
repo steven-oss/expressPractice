@@ -1,21 +1,33 @@
 const express = require('express')
+const { mysqlConnection } = require('../../config/mysqlConnection')
 const router = express.Router()
 
-router.use((req,res,next)=>{
-    console.log('requsetTime: ',new Date(new Date().getTime()+8*60*60*1000))
-    next()
-})
+router.get('/',async (req,res)=>{
+    try{
+        const connection = await mysqlConnection()
+        await connection.query('SELECT * FROM `booktest`')
 
-router.get('/',(req,res)=>{
+        connection.end()
+    }catch(error){
+        console.error('連接數據庫時出現錯誤：',error)
+    }
     res.render('page',{'text':'Get a book'})
 })
 
-router.post('/',(req,res)=>{
+router.post('/',async (req,res)=>{
+    try{
+        const connection = await mysqlConnection()
+        await connection.query('INSERT INTO `booktest` (`bookName`) VALUES ("testBook-1")')
+
+        connection.end()
+    }catch(error){
+        console.error('連接數據庫時出現錯誤：',error)
+    }
     res.render('page',{'text':'Post a book'})
 })
 
-router.delete('/',(req,res)=>{
-    res.render('page',{'text':'Delete the book'})
-})
+// router.delete('/',(req,res)=>{
+//     res.render('page',{'text':'Delete the book'})
+// })
 
 module.exports = router
