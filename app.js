@@ -6,6 +6,7 @@ const port = 8000
 app.set('views',__dirname + '/public/views') // 樣版引擎所在的資料夾
 app.set('view engine', 'ejs') // 樣版的屬性
 
+app.use(express.json())
 app.use(router)
 
 app.listen(port,()=>{
