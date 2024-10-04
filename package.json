@@ -3,15 +3,23 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
+    "start": "cross-env NODE_ENV=local nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "cross-env": "^7.0.3",
+    "dayjs": "^1.11.13",
+    "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "express": "^4.21.0",
+    "express-session": "^1.18.0",
+    "express-validator": "^7.2.0",
+    "lodash": "^4.17.21",
     "mysql2": "^3.11.3",
+    "nodemon": "^3.1.7",
     "sequelize": "^6.37.3",
     "sequelize-auto": "^0.8.8"
   }

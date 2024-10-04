@@ -3,11 +3,11 @@ const mysql = require('mysql2/promise')
 async function mysqlConnection() {
     try{
         const connection = await mysql.createConnection({
-            host:'localhost',
+            host:process.env.MYSQL_HOSTNAME,
             port:3306,
-            user:'root',
+            user:process.env.MYSQL_USERNAME,
             database:'book',
-            password:'123456'
+            password:process.env.MYSQL_PASSWORD
         })
 
         return connection;

@@ -1,7 +1,15 @@
+const _=require('lodash')
+const dayjs = require('dayjs')
+const {check,validationResult} = require('express-validator')
 const express = require('express')
 // const { mysqlConnection } = require('../../config/mysqlConnection')
 const router = express.Router()
 const {booktest} = require('../../models/index')
+
+router.use((req,res,next)=>{
+    console.log('requestTime',dayjs().format('YYYY-MM-DD HH:mm:ss'))
+    next()
+})
 
 router.get('/',async (req,res)=>{
     try{
@@ -13,7 +21,19 @@ router.get('/',async (req,res)=>{
     res.render('page',{'text':'Get a book'})
 })
 
-router.post('/',async (req,res)=>{
+router.post('/',[
+    check('bookName')
+      .exists({checkFalsy:true})
+      .withMessage('缺少bookName')
+],async (req,res)=>{
+    const errors = validationResult(req)
+
+    if(!errors.isEmpty()){
+        const errorMessage = errors.array().map(error=>error.msg)
+        console.log(errorMessage)
+        return res.status(400).json({errors:errorMessage})
+    }
+
     const bookName = req.body.bookName
 
     try{
