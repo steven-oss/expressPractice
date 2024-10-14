@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { user } = require('../../models/user'); // 确保正确导入用户模型
+const passwordUtils = require('../../utils/passwordUtils')
 
 router.get('/', (req, res) => {
     res.render('signIn');
@@ -9,7 +10,7 @@ router.get('/', (req, res) => {
 router.post('/', async (req, res) => {
     const { username, password } = req.body;
     let userData;
-
+    
     try {
         // 查找是否已存在用户
         userData = await user.findOne({
@@ -33,9 +34,11 @@ router.post('/', async (req, res) => {
 
     // 用户不存在，创建新用户
     try {
+        const hashedPassword = await passwordUtils.hash(password)
+
         await user.create({
             username: username,
-            password: password
+            password: hashedPassword
         });
         return res.render('signIn', {
             error: 'Registration successful. Please go to the login page to log in again.'
