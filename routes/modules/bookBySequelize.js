@@ -5,6 +5,7 @@ const express = require('express')
 // const { mysqlConnection } = require('../../config/mysqlConnection')
 const router = express.Router()
 const {booktest} = require('../../models/index')
+const {book} = require('../../models/book')
 
 router.use((req,res,next)=>{
     console.log('requestTime',dayjs().format('YYYY-MM-DD HH:mm:ss'))
@@ -37,18 +38,20 @@ router.post('/',[
     const bookName = req.body.bookName
 
     try{
-        const books = await booktest.create({bookName:bookName},{raw:true})
+        // const books = await booktest.create({bookName:bookName},{raw:true})
+        const books = await book.create({bookName:bookName,memberId:req.session.userId},{raw:true})
     }catch(error){
         console.error('連接數據庫時出現錯誤：',error)
     }
-    res.render('page',{'text':`add a new book: ${bookName}`})
+    res.redirect('/')
+    // res.render('page',{'text':`add a new book: ${bookName}`})
 })
 
-router.delete('/:id',async (req,res)=>{
-    const id = req.params.id
+router.delete('/',async (req,res)=>{
+    const id = req.body.id
 
     try{
-        const books = await booktest.destroy({
+        const books = await book.destroy({
             where:{
                 id:id
             }
@@ -57,8 +60,9 @@ router.delete('/:id',async (req,res)=>{
     }catch(error){
         console.error('連接數據庫時出現錯誤：',error)
     }
+    res.redirect('/')
 
-    res.render('page',{'text':`Delete the book number ${id}`})
+    // res.render('page',{'text':`Delete the book number ${id}`})
 })
 
 module.exports = router

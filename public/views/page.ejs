@@ -9,7 +9,32 @@
         <%- include('header') %>
     <body>
         <main>
-            <p><%= username %>'s book list</p>
+            <form action="/book" method="post">
+                <label for="title">Book Name:</label>
+                <input type="text" id="bookName" name="bookName" placeholder="book Name" required>
+                <button type="submit">Add Book</button>
+                <br>
+            </form>
+            <form action="/book?_method=DELETE" method="post">
+                <label for="bookToDelete">Delete Book's Id:</label>
+                <select id="bookToDelete" name="id">
+                    <% if (books && books.length > 0) { %>
+                        <% books.forEach(function(book) { %>
+                          <option value="<%= book.id %>"><%= book.id %></option>
+                        <% }); %>
+                      <% } %>
+                </select>
+                <button type="submit">Delete Book</button>
+            </form>
+            <ul>
+                <% if (books && books.length > 0) { %>
+                  <% books.forEach(function(book) { %>
+                    <li><%= book.id %>.<%= book.bookName %></li>
+                  <% }); %>
+                <% } else { %>
+                  <li>No books available</li>
+                <% } %>
+              </ul>
         </main>
         <%- include('footer'); %>
     </body>

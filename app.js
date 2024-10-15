@@ -3,6 +3,7 @@ require('dotenv').config({path:'./config/env/local.env'})
 const express = require('express')
 const router = require('./routes')
 const session = require('express-session')
+const methodOverride = require('method-override')
 const app = express()
 const port = 8000
 
@@ -17,6 +18,7 @@ app.use(session({
     saveUninitialized: false,
     cookie:{secure:false}
 }))
+app.use(methodOverride('_method'))
 app.use(router)
 
 app.listen(port,()=>{
